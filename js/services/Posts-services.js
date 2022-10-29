@@ -51,6 +51,8 @@ class PostService{
     getPostsPorIdUsuario = async (IDs) => {
         let returnEntity = null;
         const query = "select Usuario.nombre, P.*, Materia.Nombre as Materia, Materia.ColorCode as Color from Posts P inner join Usuario on P.idUsuario = Usuario.ID inner join Materia on P.IdMateria = Materia.ID where idUsuario = @pId";
+        
+        if (/^[0-9]*$/.test(IDs)){
         const pool = await sql.connect(config);
         const rows = await pool.request()
             .input('pId', sql.Int, IDs)
@@ -62,6 +64,9 @@ class PostService{
         }else{
             return "404";
         }
+    }else{
+        return "404";
+    }
     }
 
 
@@ -145,6 +150,65 @@ class PostService{
             console.log(error)
         }
         return returnEntity[0]
+
+    }
+
+
+    getVotoHechoAPostPorIDUsuario = async (IDs,PostIDs) => {
+        let returnEntity = null;
+        console.log('debug en get by id')
+        try {
+            let pool = await sql.connect(config);
+            let result = await pool.request()
+                    .input('pId', sql.Int, IDs)
+                    .input('pPId', sql.Int, PostIDs)
+                    .query("select * from UsuarioPuntajeAPost where IdUsuario = @pId and IdPost = @pPId");
+                    
+            returnEntity = result.recordsets;
+        }catch(error){
+            console.log(error)
+        }
+        return returnEntity[0][0]
+
+    }
+
+    updateVotoHechoAPostPorIDUsuario = async (IDs,PostIDs,Voto) => {
+        let returnEntity = null;
+        console.log('debug en Voto hecho a post por id usuario')
+        try {
+            let pool = await sql.connect(config);
+            let result = await pool.request()
+                    .input('pId', sql.Int, IDs)
+                    .input('pPId', sql.Int, PostIDs)
+                    .input('pVoto', sql.Int, Voto)
+                    .query("update UsuarioPuntajeAPost set Voto = @pVoto where IdUsuario = @pId and IdPost = @pPId");
+                    
+            returnEntity = result.rowsAffected;
+            console.log(returnEntity)
+        }catch(error){
+            console.log(error)
+        }
+        return returnEntity[0][0]
+
+    }
+
+    InsertVotoHechoAPostPorIDUsuario = async (IDs,PostIDs,Voto) => {
+        let returnEntity = null;
+        console.log('debug en insert Voto hecho a post por id usuario')
+        try {
+            let pool = await sql.connect(config);
+            let result = await pool.request()
+                    .input('pId', sql.Int, IDs)
+                    .input('pPId', sql.Int, PostIDs)
+                    .input('pVoto', sql.Int, Voto)
+                    .query("INSERT INTO UsuarioPuntajeAPost(IdUsuario,IdPost,Voto) VALUES (@pId, @pPId, @pVoto)");
+                    
+            returnEntity = result.rowsAffected;
+            console.log(returnEntity)
+        }catch(error){
+            console.log(error)
+        }
+        return returnEntity[0][0]
 
     }
 
