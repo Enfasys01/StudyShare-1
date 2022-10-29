@@ -9,7 +9,7 @@ class MateriaService{
         let result = await pool.request()
                         .query(query);
         const returnEntity = result.recordsets;
-        return returnEntity[0][0]
+        return returnEntity[0]
     }
 
 }

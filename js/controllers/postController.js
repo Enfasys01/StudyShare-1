@@ -9,9 +9,10 @@ const router = Router();
 
 
 router.get('', async (req, res) => {
+    console.log('hola')
+
     const post = await srvPosts.getAll();
     res.status(200).json(post);
-
 })
 
 router.get('/TraerPostsMasRecientes/', async (req, res) => {    //Funciona

@@ -44,9 +44,9 @@ const config = {
 
 
 const config = {
-  user: 'idkkk',
-  password: 'idk',
-  server:'A-PHZ2-CIDI-023',
+  user: 'Ivo',
+  password: 'Ivo',
+  server:'IVAN\\SQLEXPRESS',
   database: 'StudyShare',
   options :{
     trustServerCertificate : true,
